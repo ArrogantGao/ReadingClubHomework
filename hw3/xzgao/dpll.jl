@@ -40,18 +40,14 @@ function _dpll(cnf::CNF{T}, config::Dict{T, Bool}) where T
                 config1 = deepcopy(config)
                 config1[var.name] = !var.neg
                 res1, config1 = _dpll(apply_config!(deepcopy(cnf), var.name, !var.neg), config1)
+                res1 && return true, config1
 
                 config2 = deepcopy(config)
                 config2[var.name] = var.neg
                 res2, config2 = _dpll(apply_config!(deepcopy(cnf), var.name, var.neg), config2)
+                res2 && return true, config2
                 
-                if res1
-                    return true, config1
-                elseif res2
-                    return true, config2
-                else
-                    return false, nothing
-                end
+                return false, nothing
             end
         end
     end
